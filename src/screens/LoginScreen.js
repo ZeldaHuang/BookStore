@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
+import { TouchableOpacity, StyleSheet, View ,KeyboardAvoidingView } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
 import Logo from '../components/Logo'
@@ -33,12 +33,12 @@ const LoginScreen = ({ navigation }) => {
     });
   }
 
-  return (
+  return (      
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Logo />
       <Header>BookStore</Header>
-      <TextInput
+        <TextInput
         label="电话号码"
         returnKeyType="next"
         value={email.value}
@@ -59,6 +59,7 @@ const LoginScreen = ({ navigation }) => {
         errorText={password.error}
         secureTextEntry
       />
+      
       <View style={styles.forgotPassword}>
         <TouchableOpacity
           onPress={() => navigation.navigate('ForgotPasswordScreen')}
@@ -77,6 +78,7 @@ const LoginScreen = ({ navigation }) => {
       </View>
       <Toast message={error} onDismiss={() => setError('')} />
     </Background>
+    
   )
 }
 

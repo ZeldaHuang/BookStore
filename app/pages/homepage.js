@@ -18,30 +18,28 @@ const borderRadius = px2dp(20);
 
 HomeScreen.propTypes = {
   navigation: PropTypes.object,
-  favors:PropTypes.object,
 };
-
-HomeScreen.defaultProps = {
-  favors:[],
-}
 export default function HomeScreen(props) {
+  const [favors,setFavors]=React.useState([]);
   const addItem=(item)=>{
-    props.favors.push(item);
+    var arrays=favors;
+    arrays.push(item);
+    setFavors(arrays);
   };
   const deleteItem=(item)=>{
-    console.log(item.key+">..");
-    props.favors.forEach((elem, index, arr)=>{
-      console.log(elem);
+    var arrays=favors;
+    arrays.forEach((elem, index, arr)=>{
       if(item.key == elem.key) {
            arr.splice(index, 1);
       }
     });
+    setFavors(arrays);
   };
   const isFindItem=(key)=>{
     // console.log(props.favors);
-    for( var i=0;i<props.favors.length;++i){
+    for( var i=0;i<favors.length;++i){
       // console.log(props.favors[i].key+"....");
-      if(props.favors[i].key==key){
+      if(favors[i].key==key){
         return true;
       }
     }
@@ -56,7 +54,7 @@ export default function HomeScreen(props) {
             addFavor={(item)=>addItem(item)} deleteFavor={(item)=>deleteItem(item)} isFindFavor={(item)=>isFindItem(item)} />
           </View>
           <View style={style.centerView}>
-            <MyFavor navigation={props.navigation} items={props.favors} 
+            <MyFavor navigation={props.navigation} items={favors} 
             addFavor={(item)=>addItem(item)} deleteFavor={(item)=>deleteItem(item)} isFindFavor={(item)=>isFindItem(item)} />
           </View>
           <View style={style.centerView}>
@@ -125,15 +123,15 @@ function FavorItem(props){
       </Card.Cover>
       </TouchableOpacity>
       <Card.Actions>
-      <Button size="large" style={style.typeButton}  icon="book-open-page-variant" color={Colors.black}
+      <Button  style={style.typeButton}  icon="book-open-page-variant" color={Colors.black}
       onPress={()=>props.navigation.navigate('BookList',{addFavor:addFavor,deleteFavor:deleteFavor,isFindFavor:isFindFavor})}>
         <Text style={style.typeText}>书籍</Text>
       </Button>
-      <Button size="large" style={style.typeButton} icon="book" color={Colors.black}
+      <Button  style={style.typeButton} icon="book" color={Colors.black}
       onPress={()=>{}}>
         <Text style={style.typeText}>杂志</Text>
       </Button>
-      <Button size="large" style={style.typeButton} icon="book-open-variant" color={Colors.black}
+      <Button  style={style.typeButton} icon="book-open-variant" color={Colors.black}
       onPress={()=>{}}
       >
        <Text style={style.typeText}>报纸</Text>
@@ -150,6 +148,9 @@ function FavorItem(props){
   function MyFavor (props) {
     const [expanded, setExpanded] = React.useState(true);
     const handlePress = () => setExpanded(!expanded);
+    useEffect(() => {
+      console.log("....");
+    }, []);
     return (
         <Card>
         <List.Accordion

@@ -1,5 +1,6 @@
 import React from 'react'
-import { ImageBackground, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import { ImageBackground, StyleSheet } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { theme } from '../core/theme'
 
 const Background = ({ children }) => (
@@ -8,9 +9,9 @@ const Background = ({ children }) => (
     resizeMode="repeat"
     style={styles.background}
   >
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <KeyboardAwareScrollView contentContainerStyle={styles.container} resetScrollToCoords={{ x: 0, y: 0 }} >
       {children}
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   </ImageBackground>
 )
 
