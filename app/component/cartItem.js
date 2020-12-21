@@ -15,26 +15,35 @@ const showModal = () => setVisible(true);
 const hideModal = () => setVisible(false);
     return(
       <Card style={{height:100,borderRadius:20,marginTop:10}}>
-<TouchableOpacity onPress={()=>{setChecked(!checked)}} style={{marginTop:30}}>
+      
           <View style={styles.container}>
+            <TouchableOpacity onPress={()=>{setChecked(!checked)}} style={{alignItems:"center",flexDirection: 'row',marginBottom:px2dp(15)}} >
             <AntdIcon name={checked==true?"checkcircle":"checkcircleo"} size={20} style={{marginLeft:20}}></AntdIcon>
             <Image
             source={LocalImg.book1 }
             style={styles.thumbnail }
            /> 
+              </TouchableOpacity>
             <View style={styles.rightContainer}>
               
-              <View style={{alignSelf:"center"}}>
+              <TouchableOpacity style={{alignSelf:"center",marginLeft:px2dp(5)}}>
                 <Text style={styles.title}>《三体三部曲》</Text>
                 <Text style={styles.price}>￥99</Text>
+              </TouchableOpacity>
+              <View style={{flexDirection:"row",alignItems:"center",marginBottom:px2dp(15)}}>
+                <TouchableOpacity style={{marginHorizontal:px2dp(12)}}
+              onPress={()=>{setNum(num+1)}}>
+                <AntdIcon name="pluscircle" size={px2dp(22)}></AntdIcon>
+              </TouchableOpacity >
+              <Text style={{fontSize:20}}>{num}</Text>
+              <TouchableOpacity style={{marginHorizontal:px2dp(12)}}
+              onPress={()=>{setNum(num-1)}}>
+                <AntdIcon name="minuscircle" size={px2dp(22)}></AntdIcon>
+              </TouchableOpacity>
               </View>
-              <IconButton icon="plus-circle" style={{alignSelf:"center"}} onPress={()=>{setNum(num+1)}}/>
-              <Text style={{alignSelf:"center",fontSize:20}}>{num}</Text>
-              <IconButton icon="minus-circle" style={{alignSelf:"center" }} onPress={()=>{setNum(num-1)}} />
-              
             </View>
+           
           </View>
-        </TouchableOpacity>
       </Card>
         
         
@@ -54,6 +63,7 @@ export default CartItem;
         flex: 1,
         marginRight:100,
         flexDirection:"row",
+        marginBottom:px2dp(5)
       },
       title: {
         fontSize: 20,
