@@ -10,6 +10,7 @@ import LocalImg from '../images/images'
 function CartItem (props){
 const [checked, setChecked] = React.useState(false);
 const [visible, setVisible] = React.useState(false);
+const [num,setNum]=React.useState(0);
 const showModal = () => setVisible(true);
 const hideModal = () => setVisible(false);
     return(
@@ -27,9 +28,9 @@ const hideModal = () => setVisible(false);
                 <Text style={styles.title}>《三体三部曲》</Text>
                 <Text style={styles.price}>￥99</Text>
               </View>
-              <IconButton icon="plus-circle" style={{alignSelf:"center"}} />
-              <Text style={{alignSelf:"center",fontSize:20}}>1</Text>
-              <IconButton icon="plus-circle" style={{alignSelf:"center" }} />
+              <IconButton icon="plus-circle" style={{alignSelf:"center"}} onPress={()=>{setNum(num+1)}}/>
+              <Text style={{alignSelf:"center",fontSize:20}}>{num}</Text>
+              <IconButton icon="minus-circle" style={{alignSelf:"center" }} onPress={()=>{setNum(num-1)}} />
               
             </View>
           </View>
