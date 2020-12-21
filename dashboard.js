@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './app/pages/homepage'
+import ShopCart from './app/pages/shopCart'
 import BookList from './app/pages/bookpage';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
@@ -38,7 +39,7 @@ export default function App() {
                     inactiveTintColor: '#666',
                   }}>
                   <Tab.Screen name="HomePage" options={{ title: '主页' }} component={HomeScreen} />
-                  <Tab.Screen name="ShoppingCart" options={{ title: '购物车' }} component={HomeScreen} />
+                  <Tab.Screen name="ShoppingCart" options={{ title: '购物车' }} component={ShopCart} />
                   <Tab.Screen name="My" options={{ title: '我的' }} component={HomeScreen} />          
                 </Tab.Navigator>
               )}

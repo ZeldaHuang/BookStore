@@ -7,6 +7,9 @@ import {deviceWidth, isIOS, px2dp} from '../util/index';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
 import BookItem from '../component/item';
 import PropTypes from 'prop-types';
+import * as SQLite from 'expo-sqlite';
+
+const db = SQLite.openDatabase("db.db");
 
 const InputHeight = px2dp(28);
 
@@ -63,7 +66,6 @@ export default function HomeScreen(props) {
         </ScrollView>
       </View>
       </Portal.Host>
-      
     );
   };
 FavorItem.propTypes={

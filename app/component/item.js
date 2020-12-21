@@ -12,6 +12,7 @@ GoodsItem.propTypes={
   isFindFavor:PropTypes.func,
 };
 function GoodsItem (props){
+  console.log(props.data);
 
   const favorFun=()=>{
     if(isFavor==true){

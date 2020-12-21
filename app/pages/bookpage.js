@@ -9,14 +9,14 @@ function BookList ({ route, navigation }){
     const [addFavor,deleteFavor,isFindFavor]=[route.params.addFavor,route.params.deleteFavor,route.params.isFindFavor];
     return (
         <Portal.Host>
-            <View style={styles.container}>
-        <FlatList
-            data={Data.book}
-            renderItem={({item}) => 
-            <BookItem data={item}
-            addFavor={addFavor} deleteFavor={deleteFavor} isFindFavor={isFindFavor}/>
-            }
-        />
+        <View style={styles.container}>
+            <FlatList
+                data={Data.book}
+                renderItem={({item}) => 
+                <BookItem data={item}
+                addFavor={addFavor} deleteFavor={deleteFavor} isFindFavor={isFindFavor}/>
+                }
+            />
         </View>
         </Portal.Host>
     
