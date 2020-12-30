@@ -11,11 +11,14 @@ import { sendEmailWithPassword } from '../api/auth-api'
 import Toast from '../components/Toast'
 import { theme } from '../core/theme'
 
-const ForgotPasswordScreen = ({ navigation }) => {
-  const [email, setEmail] = useState({ value: '', error: '' })
+const ForgotPasswordScreen = ({ route,navigation }) => {
+  const [email, setEmail] = useState({ value: route.params.phone, error: '' })
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState({ value: '', type: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+  const resetPassWord=()=>{
+    navigation.goBack;
+  }
   const sendResetPasswordEmail = async () => {
     const emailError = emailValidator(email.value)
     if (emailError) {
@@ -61,7 +64,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         textContentType="emailAddress"
         keyboardType="email-address"
       />
-     <View style={styles.row}>
+      <View style={styles.row}>
         <TouchableOpacity onPress={() => {}}>
           <Text style={styles.link}>发送验证码</Text>
         </TouchableOpacity>
@@ -69,7 +72,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
       <TextInput
         label="验证码"
         returnKeyType="done"
-        value={email.value}
+        value={}
         onChangeText={(text) => setEmail({ value: text, error: '' })}
         error={!!email.error}
         errorText={email.error}
@@ -81,7 +84,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
       <Button
         loading={loading}
         mode="contained"
-        onPress={sendResetPasswordEmail}
+        onPress={()=>{resetPassWord()}}
         style={{ marginTop: 16 }}
       >
         重置密码

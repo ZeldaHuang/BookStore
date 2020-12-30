@@ -20,7 +20,6 @@ const hideModal = () => setVisible(false);
           <TouchableOpacity onPress={()=>{setChecked(!checked)}} style={{alignItems:"center",flexDirection: 'row',marginBottom:px2dp(15)}} >
             <AntdIcon name={checked==true?"checkcircle":"checkcircleo"} size={20} style={{marginLeft:20}}></AntdIcon>
             <Image
-
             source={LocalImg.book1 }
             style={styles.thumbnail }
           /> 

@@ -29,7 +29,6 @@ function ShopCart ({ route, navigation }){
                     结算
                      </Button>
                 </View>
-                
             </View>
         </Portal.Host>
     );

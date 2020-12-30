@@ -5060,6 +5060,11 @@ react-native-screens@~2.15.0:
   resolved "https://registry.npm.taobao.org/react-native-screens/download/react-native-screens-2.15.0.tgz?cache=0&sync_timestamp=1607615410280&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-native-screens%2Fdownload%2Freact-native-screens-2.15.0.tgz#9b97c1881c4fcdf304bf363f0013225901625f44"
   integrity sha1-m5fBiBxPzfMEvzY/ABMiWQFiX0Q=
 
+react-native-sqlite-storage@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npm.taobao.org/react-native-sqlite-storage/download/react-native-sqlite-storage-5.0.0.tgz#fb015c928b59d3000360fb0774a99545e7a695d6"
+  integrity sha1-+wFckotZ0wADYPsHdKmVReemldY=
+
 react-native-status-bar-height@^2.6.0:
   version "2.6.0"
   resolved "https://registry.npm.taobao.org/react-native-status-bar-height/download/react-native-status-bar-height-2.6.0.tgz#b6afd25b6e3d533c43d0fcdcfd5cafd775592cea"

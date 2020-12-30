@@ -12,13 +12,31 @@ import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 import { loginUser } from '../api/auth-api'
 import Toast from '../components/Toast'
-
+import * as SQLiteExpo from 'expo-sqlite';
+var db;
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
   const [loading, setLoading] = useState()
   const [error, setError] = useState()
-
+  const createTable=()=>{
+    db.transaction((tx)=> {
+      tx.executeSql('CREATE TABLE IF NOT EXISTS USER(' +
+          'id INTEGER PRIMARY KEY  AUTOINCREMENT,' +
+          'name varchar not null,'+
+          'phone varchar not null unique,'+
+          'password VARCHAR not null)'
+          , [], ()=> {
+              console.log('executeSql');
+          }, (err)=> {
+            console.log('executeSql'+err);
+          });
+    }, (err)=> {//所有的 transaction都应该有错误的回调方法，在方法里面打印异常信息，不然你可能不会知道哪里出错了。
+      console.log('create'+ err);
+    }, ()=> {
+      console.log('create');
+    })
+  }
   const onLoginPressed = async () => {
     const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
@@ -27,9 +45,28 @@ const LoginScreen = ({ navigation }) => {
       setPassword({ ...password, error: passwordError })
       return
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
+    db = SQLiteExpo.openDatabase('MyDb', "1.0");
+    createTable();
+    db.transaction((tx)=>{
+      tx.executeSql("select * from user", [],(tx,results)=>{
+        var lens = results.rows.length;
+        var isValid=false;
+        for(let i=0; i<lens; i++){
+            var u = results.rows.item(i);
+            if(u.phone==email.value&&u.password==password.value){
+              isValid=true;
+            }
+        }
+        if(isValid){
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Dashboard' }],
+          });
+        }
+        else{
+          setError("密码错误或账户不存在");
+        }
+     },(err)=>{console.log(err)});
     });
   }
 
@@ -62,7 +99,7 @@ const LoginScreen = ({ navigation }) => {
       
       <View style={styles.forgotPassword}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ForgotPasswordScreen')}
+          onPress={() => navigation.navigate('ForgotPasswordScreen',{phone:email.value})}
         >
           <Text style={styles.forgot}>忘记密码?</Text>
         </TouchableOpacity>
