@@ -150,9 +150,6 @@ function FavorItem(props){
   function MyFavor (props) {
     const [expanded, setExpanded] = React.useState(true);
     const handlePress = () => setExpanded(!expanded);
-    useEffect(() => {
-      console.log("....");
-    }, []);
     return (
         <Card>
         <List.Accordion

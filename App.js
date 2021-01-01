@@ -12,6 +12,7 @@ import {
   RegisterScreen,
   ForgotPasswordScreen,
   Dashboard,
+  LoginWithVCode
 } from './src/screens'
 import { FIREBASE_CONFIG } from './src/core/config'
 
@@ -42,6 +43,7 @@ const App = () => {
             name="ForgotPasswordScreen"
             component={ForgotPasswordScreen}
           />
+          <Stack.Screen name="LoginWithVCode" component={LoginWithVCode} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

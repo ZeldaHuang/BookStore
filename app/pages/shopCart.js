@@ -6,13 +6,66 @@ import { Provider,Modal, Portal,Colors,Card,Button} from 'react-native-paper';
 import CartItem from "../component/cartItem"
 import Data from '../data';
 import {deviceWidth, isIOS, px2dp} from '../util/index';
+import * as SQLiteExpo from 'expo-sqlite';
+import { useState } from 'react';
+var db;
 function ShopCart ({ route, navigation }){
     const [allChecked,setAllChecked] =React.useState(false);
+    const [bookData,setBookData]=React.useState([]);
+    const initBookData=()=>{
+        var data=[];
+        db = SQLiteExpo.openDatabase('MyDb', "1.0");
+        db.transaction((tx)=>{
+            tx.executeSql('drop table if exists Book',[],()=>{console.log("删除")},()=>{console.log("删除失败")});
+            tx.executeSql('CREATE TABLE IF NOT EXISTS Book(' +
+            'id varchar PRIMARY KEY,' +
+            'num INTEGER)'
+          , [], ()=> {
+              console.log('createTable');
+          }, (err)=> {
+            console.log('createTableErr'+err);
+          });
+          Object.keys(Data).forEach((item, i) => {
+            Data[item].forEach((e, j) => {
+                tx.executeSql("INSERT INTO Book(id,num)"+
+                "values(?,?)"
+                , [Data[item][j].key,1], ()=> {
+                }, (err)=> {
+                    console.log('insertError'+err);
+                });
+            });
+          });
+          tx.executeSql('select * from Book where num>0',
+            [],
+            (tx,results)=>{
+                var lens=results.rows.length;
+                console.log(lens);
+                for(let i=0;i<lens;++i)
+                {
+                    var u = results.rows.item(i);
+                    var key=u.id;
+                    var [j,k]=key.split("-");
+                    if(j==0){
+                        item=Data.book[k];
+                    }
+                    item.num=u.num;
+                    data.push(item);
+                }
+                setBookData(data);
+            });
+        });
+    }
+    React.useState(()=>{initBookData()});
     return (
         <Portal.Host>
             <View style={styles.container}>
-                <CartItem></CartItem>
-                <CartItem></CartItem>
+            <FlatList
+                data={bookData}
+                renderItem={({item}) => 
+                <CartItem data={item}
+                />
+                }
+            />
             </View>
             <View style={styles.bottomBar}>
                 <TouchableOpacity onPress={()=>{setAllChecked(!allChecked)}}

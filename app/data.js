@@ -89,5 +89,6 @@ Object.keys(data).forEach((item, i) => {
       //goods[item][j].image = pics[Math.floor(Math.random()*len)]
     });
   });
+
 export default data;
 

@@ -96,9 +96,15 @@ const LoginScreen = ({ navigation }) => {
         errorText={password.error}
         secureTextEntry
       />
-      
+
       <View style={styles.forgotPassword}>
-        <TouchableOpacity
+      <TouchableOpacity
+          onPress={() => navigation.navigate('LoginWithVCode',{phone:email.value})}
+        >
+          <Text style={styles.forgot}>验证码登录</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={{marginLeft:170}}
           onPress={() => navigation.navigate('ForgotPasswordScreen',{phone:email.value})}
         >
           <Text style={styles.forgot}>忘记密码?</Text>
@@ -121,9 +127,9 @@ const LoginScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   forgotPassword: {
-    width: '100%',
-    alignItems: 'flex-end',
+    width:"100%",
     marginBottom: 24,
+    flexDirection:"row",
   },
   row: {
     flexDirection: 'row',
