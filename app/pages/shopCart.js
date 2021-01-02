@@ -7,13 +7,14 @@ import CartItem from "../component/cartItem"
 import Data from '../data';
 import {deviceWidth, isIOS, px2dp} from '../util/index';
 import * as SQLiteExpo from 'expo-sqlite';
-import { useState } from 'react';
+import { useEffect,useImperativeHandle } from 'react';
 var db;
 function ShopCart ({ route, navigation }){
     const [allChecked,setAllChecked] =React.useState(false);
     const [bookData,setBookData]=React.useState([]);
     const [totPrice,setTotPrice]=React.useState(0);
     const initBookData=()=>{
+        console.log("in");
         var data=[];
         db = SQLiteExpo.openDatabase('MyDb', "1.0");
         db.transaction((tx)=>{
@@ -57,11 +58,17 @@ function ShopCart ({ route, navigation }){
         });
     }
     const changeTotPrice=(changePrice)=>{
+        if(allChecked&&changePrice>0){  
+
+            return ;
+        }
         if(totPrice+changePrice>=0){
             setTotPrice(totPrice+changePrice);
         }
     }
-    React.useState(()=>{initBookData()});
+    useEffect(()=>{
+        initBookData();
+    },[route.params])
     return (
         <Portal.Host>
             <View style={styles.container}>
@@ -70,8 +77,7 @@ function ShopCart ({ route, navigation }){
                 renderItem={({item}) => 
                 <CartItem data={item}
                     changeTotPrice={(price)=>changeTotPrice(price)}
-                    checked={allChecked} reFlash={()=>initBookData()}
-                />
+                    checked={allChecked} reFlash={()=>initBookData()}/>
                 }
             />
             </View>

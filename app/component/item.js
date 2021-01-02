@@ -5,6 +5,8 @@ import AntdIcon from 'react-native-vector-icons/AntDesign';
 import {Modal, Portal,Colors} from 'react-native-paper';
 import {deviceWidth, isIOS, px2dp} from '../util/index';
 import { ScrollView } from 'react-native-gesture-handler';
+import * as SQLiteExpo from 'expo-sqlite';
+var db;
 GoodsItem.propTypes={
   data:PropTypes.object,
   addFavor:PropTypes.func,
@@ -24,44 +26,80 @@ function GoodsItem (props){
     }
   }; 
   const [visible, setVisible] = React.useState(false);
+  const [num,setNum]=React.useState(props.data.num);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const [isFavor,setIsFavor]=React.useState(props.isFindFavor(props.data.key));
-    return(
-      <TouchableOpacity onPress={showModal}>
-      <View style={styles.container}>
-        <Image
-          source={props.data.image }
-          style={styles.thumbnail}
-        />
-        <View style={styles.rightContainer}>
-          <Text style={styles.title}>{props.data.title}</Text>
-          <TouchableOpacity onPress={()=>favorFun()} style={{alignSelf:"flex-end",marginRight:10,height:px2dp(25),width:px2dp(25)}}>
-            {isFavor?(<AntdIcon name={'star'} size={px2dp(20)} color={'#0865b5'}/>)
-              :(<AntdIcon name={'staro'} size={px2dp(20)} color={'#0865b5'}/>)}
-          </TouchableOpacity>
-          <Text style={styles.author}>作者:{props.data.author}    售价:￥{props.data.price}</Text>
-        </View>
+  const plus=()=>{
+    db = SQLiteExpo.openDatabase('MyDb', "1.0");
+    db.transaction((tx)=>{
+        tx.executeSql('update Book set num=? where id=?'
+      , [num+1,props.data.key], ()=> {
+          setNum(num+1);
+          console.log('plus');
+      }, (err)=> {
+        console.log('plus'+err);
+      });
+    });
+  }
+  const minus=()=>{
+    db = SQLiteExpo.openDatabase('MyDb', "1.0");
+    db.transaction((tx)=>{
+      tx.executeSql('update Book set num=? where id=?'
+      , [num-1,props.data.key], ()=> {
+          setNum(num-1);
+          console.log('minus');
+      }, (err)=> {
+        console.log('minus'+err);
+      });
+    });
+  }
+  return(
+    <TouchableOpacity onPress={showModal}>
+    <View style={styles.container}>
+      <Image
+        source={props.data.image }
+        style={styles.thumbnail}
+      />
+      <View style={styles.rightContainer}>
+        <Text style={styles.title}>{props.data.title}</Text>
+        <TouchableOpacity onPress={()=>favorFun()} style={{alignSelf:"flex-end",marginRight:10,height:px2dp(25),width:px2dp(25)}}>
+          {isFavor?(<AntdIcon name={'star'} size={px2dp(20)} color={'#0865b5'}/>)
+            :(<AntdIcon name={'staro'} size={px2dp(20)} color={'#0865b5'}/>)}
+        </TouchableOpacity>
+        <Text style={styles.author}>作者:{props.data.author}    售价:￥{props.data.price}</Text>
       </View>
-      <Portal>
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
-          <ScrollView>
-          <TouchableOpacity 
-          onPress={()=>favorFun()}>{isFavor?(<AntdIcon name={'star'} size={px2dp(24)} color={'#0865b5'} style={{alignSelf:"flex-end"}}/>)
-              :(<AntdIcon name={'staro'} size={px2dp(24)} color={'#0865b5'} style={{alignSelf:"flex-end"}}/>)}
-            </TouchableOpacity>
-            <Text style={{fontSize:18,alignSelf:"center"}}>{props.data.title}({props.data.author}著)</Text>
-          <Image
-              source={props.data.image }
-              style={styles.detailsImage}
-          />
-          <Text style={styles.priceStyle}>￥{props.data.price}</Text>
-          <Text>{props.data.description}</Text>
-          </ScrollView>
-        </Modal>
-      </Portal>
-    </TouchableOpacity>    
-    );
+    </View>
+    <Portal>
+      <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
+        <ScrollView>
+        <TouchableOpacity 
+        onPress={()=>favorFun()}>{isFavor?(<AntdIcon name={'star'} size={px2dp(24)} color={'#0865b5'} style={{alignSelf:"flex-end"}}/>)
+            :(<AntdIcon name={'staro'} size={px2dp(24)} color={'#0865b5'} style={{alignSelf:"flex-end"}}/>)}
+          </TouchableOpacity>
+          <Text style={{fontSize:18,alignSelf:"center"}}>{props.data.title}({props.data.author}著)</Text>
+        <Image
+            source={props.data.image }
+            style={styles.detailsImage}
+        />
+        <Text style={styles.priceStyle}>￥{props.data.price}</Text>
+        <Text>{props.data.description}</Text>
+        <View style={{flexDirection:"row",alignItems:"center",alignSelf:"flex-end",marginTop:px2dp(5)}}>
+          <TouchableOpacity style={{marginHorizontal:px2dp(12)}}
+            onPress={()=>{plus()}}>
+          <AntdIcon name="pluscircle" size={px2dp(22)}></AntdIcon>
+          </TouchableOpacity >
+          <Text style={{fontSize:20}}>{num}</Text>
+          <TouchableOpacity style={{marginHorizontal:px2dp(12)}}
+          onPress={()=>{minus()}}>
+            <AntdIcon name="minuscircle" size={px2dp(22)}></AntdIcon>
+          </TouchableOpacity>
+        </View>
+        </ScrollView>
+      </Modal>
+    </Portal>
+  </TouchableOpacity>    
+  );
 };
 export default GoodsItem;
 

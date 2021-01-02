@@ -13,15 +13,17 @@ LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();//Ignore all log notifications
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-export default function App() {
+export default function App({route,navigation}) {
   return (
       <Stack.Navigator >
+        
         <Stack.Screen name="BookStore">
         {() => (
                 <Tab.Navigator
-                  lazy={false}
+                  
+                  lazy={true}
                   screenOptions={({ route }) => ({
+                    
                     tabBarIcon: ({ focused, color, size }) => {
                       let iconName;
                       if (route.name === 'HomePage') {
@@ -33,13 +35,24 @@ export default function App() {
                       }
                       return <Icon name={iconName} size={size} color={color} />;
                     },
+                    
                   })}
                   tabBarOptions={{
                     activeTintColor: '#0865b5',
                     inactiveTintColor: '#666',
-                  }}>
-                  <Tab.Screen name="HomePage" options={{ title: '主页' }} component={HomeScreen} />
-                  <Tab.Screen name="ShoppingCart" options={{ title: '购物车' }} component={ShopCart} />
+                  }}
+                  >
+                  <Tab.Screen name="HomePage" options={{ title: '主页'  }} component={HomeScreen}/>
+                  <Tab.Screen name="ShoppingCart" options={{ title: '购物车' }} component={ShopCart}
+                   listeners={({ navigation, route }) => ({
+                    tabPress: e => {
+                      // Prevent default action
+                      e.preventDefault();
+                
+                      // Do something with the `navigation` object
+                      navigation.navigate('ShoppingCart',{gg:"..."});
+                    },
+                  })}/>
                   <Tab.Screen name="My" options={{ title: '我的' }} component={HomeScreen} />          
                 </Tab.Navigator>
               )}

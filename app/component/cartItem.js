@@ -26,7 +26,10 @@ function CartItem (props){
   },[props.checked]);
   useEffect(()=>{
     props.changeTotPrice(checked?(props.data.price*num):(-props.data.price*num));
-  },[checked])
+  },[checked]);
+  useEffect(()=>{
+    setNum(props.data.num);
+  },[props.data.num]);
   const plus=()=>{
     if(checked){
       props.changeTotPrice(props.data.price);

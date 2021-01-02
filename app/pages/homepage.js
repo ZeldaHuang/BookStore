@@ -5,9 +5,11 @@ import { Banner,Avatar, Button, Card, Title, Portal,Modal,IconButton, Colors,Lis
 import { ScrollView } from 'react-native-gesture-handler';
 import {deviceWidth, isIOS, px2dp} from '../util/index';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
-import BookItem from '../component/item';
+import GoodsItem from '../component/item';
 import PropTypes from 'prop-types';
+import Data from '../data';
 import * as SQLite from 'expo-sqlite';
+import CartItem from '../component/cartItem';
 
 const db = SQLite.openDatabase("db.db");
 
@@ -102,6 +104,7 @@ function FavorItem(props){
         icon= "star"
         >
         <Text style={{fontSize:16}}>好书推荐</Text>
+        <GoodsItem data={Data.book[0]} />
       </Banner>
       </Card>
     );
