@@ -12,11 +12,12 @@ var db;
 function ShopCart ({ route, navigation }){
     const [allChecked,setAllChecked] =React.useState(false);
     const [bookData,setBookData]=React.useState([]);
+    const [totPrice,setTotPrice]=React.useState(0);
     const initBookData=()=>{
         var data=[];
         db = SQLiteExpo.openDatabase('MyDb', "1.0");
         db.transaction((tx)=>{
-            tx.executeSql('drop table if exists Book',[],()=>{console.log("删除")},()=>{console.log("删除失败")});
+            // tx.executeSql('drop table if exists Book',[],()=>{console.log("删除")},()=>{console.log("删除失败")});
             tx.executeSql('CREATE TABLE IF NOT EXISTS Book(' +
             'id varchar PRIMARY KEY,' +
             'num INTEGER)'
@@ -25,16 +26,16 @@ function ShopCart ({ route, navigation }){
           }, (err)=> {
             console.log('createTableErr'+err);
           });
-          Object.keys(Data).forEach((item, i) => {
-            Data[item].forEach((e, j) => {
-                tx.executeSql("INSERT INTO Book(id,num)"+
-                "values(?,?)"
-                , [Data[item][j].key,1], ()=> {
-                }, (err)=> {
-                    console.log('insertError'+err);
-                });
-            });
-          });
+        //   Object.keys(Data).forEach((item, i) => {
+        //     Data[item].forEach((e, j) => {
+        //         tx.executeSql("INSERT INTO Book(id,num)"+
+        //         "values(?,?)"
+        //         , [Data[item][j].key,1], ()=> {
+        //         }, (err)=> {
+        //             console.log('insertError'+err);
+        //         });
+        //     });
+        //   });
           tx.executeSql('select * from Book where num>0',
             [],
             (tx,results)=>{
@@ -55,6 +56,11 @@ function ShopCart ({ route, navigation }){
             });
         });
     }
+    const changeTotPrice=(changePrice)=>{
+        if(totPrice+changePrice>=0){
+            setTotPrice(totPrice+changePrice);
+        }
+    }
     React.useState(()=>{initBookData()});
     return (
         <Portal.Host>
@@ -63,25 +69,37 @@ function ShopCart ({ route, navigation }){
                 data={bookData}
                 renderItem={({item}) => 
                 <CartItem data={item}
+                    changeTotPrice={(price)=>changeTotPrice(price)}
+                    checked={allChecked} reFlash={()=>initBookData()}
                 />
                 }
             />
             </View>
             <View style={styles.bottomBar}>
-                <TouchableOpacity onPress={()=>{setAllChecked(!allChecked)}}
+                <TouchableOpacity onPress={()=>{
+                    if(allChecked){
+                        setAllChecked(!allChecked);
+                        setTotPrice(0);
+                        return;
+                    }
+                    setAllChecked(!allChecked);
+                    var tot=0;
+                    for(let i=0;i<bookData.length;++i){
+                        tot+=bookData[i].price*bookData[i].num;
+                    }
+                    setTotPrice(tot);
+                }}
                 style={{alignItems:"center",flexDirection: 'row',marginLeft:px2dp(10),width:px2dp(50)}} >
                     <AntdIcon name={allChecked==true?"checkcircle":"checkcircleo"} size={20} style={{marginHorizontal:px2dp(10)}}></AntdIcon>
                     <Text style={{fontSize:15}}>全选</Text>
                 </TouchableOpacity>
-                <View style={{marginLeft:deviceWidth-px2dp(280),flexDirection:"row"}}>
-                    <Text style={{textAlign:"center",fontSize:15,alignSelf:"center",marginHorizontal:px2dp(20)}}>
+                <Text style={{textAlign:"center",fontSize:15,alignSelf:"center",marginLeft:px2dp(100)}}>
                         总计:
-                        <Text style={{color:Colors.orange700}}>￥99</Text>
-                    </Text>
-                    <Button mode="contained" onPress={() => console.log('Pressed')} style={styles.bottomButton}>
+                        <Text style={{color:Colors.orange700}}>￥{totPrice}</Text>
+                </Text>
+                <Button mode="contained" onPress={() => console.log('Pressed')} style={styles.bottomButton}>
                     结算
-                     </Button>
-                </View>
+                </Button>
             </View>
         </Portal.Host>
     );
@@ -99,18 +117,18 @@ const styles = StyleSheet.create({
       height: 44,
     },
     bottomBar:{
-        alignSelf:"center",
-        alignItems:"center",
+        width:deviceWidth,
         flexDirection:"row",
         height:px2dp(50),
-        width:deviceWidth,
         backgroundColor:Colors.white
     },
     bottomButton:{
         width:px2dp(100),
         height:px2dp(40),
-        alignSelf:"auto",
-        alignItems:"center",
+        marginBottom:px2dp(5),
+        alignSelf:"flex-end",
+        position:"absolute",
+        marginLeft:deviceWidth-px2dp(110),
         borderRadius:px2dp(20),
         backgroundColor:Colors.orange700
     }
