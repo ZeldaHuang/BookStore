@@ -4,7 +4,7 @@ import { StyleSheet, View, Text } from 'react-native'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 import { theme } from '../core/theme'
 
-const Toast = ({ type = 'error', message, onDismiss }) => (
+const Toast = ({ type, message, onDismiss }) => (
   <View style={styles.container}>
     <Snackbar
       visible={!!message}

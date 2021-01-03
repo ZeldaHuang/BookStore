@@ -15,10 +15,11 @@ import Toast from '../components/Toast'
 import * as SQLiteExpo from 'expo-sqlite';
 var db;
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
-  const [loading, setLoading] = useState()
-  const [error, setError] = useState()
+  const [email, setEmail] = useState({ value: '', error: '' });
+  const [password, setPassword] = useState({ value: '', error: '' });
+  const [loading, setLoading] = useState();
+  const [success,setSuccess]=useState();
+  const [error, setError] = useState();
   const createTable=()=>{
     db.transaction((tx)=> {
       tx.executeSql('CREATE TABLE IF NOT EXISTS USER(' +
@@ -58,10 +59,13 @@ const LoginScreen = ({ navigation }) => {
             }
         }
         if(isValid){
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'Dashboard' }],
-          });
+          setSuccess("登录成功!");
+          setTimeout(()=>{
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Dashboard' }],
+            });
+          },500);
         }
         else{
           setError("密码错误或账户不存在");
@@ -119,7 +123,8 @@ const LoginScreen = ({ navigation }) => {
           <Text style={styles.link}>点此注册</Text>
         </TouchableOpacity>
       </View>
-      <Toast message={error} onDismiss={() => setError('')} />
+      <Toast type='error' message={error} onDismiss={() => setError('')} />
+      <Toast type='success' message={success} onDismiss={() => setSuccess('')} />
     </Background>
     
   )

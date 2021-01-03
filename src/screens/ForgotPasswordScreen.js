@@ -21,6 +21,7 @@ const ForgotPasswordScreen = ({ route,navigation }) => {
   const [toast, setToast] = useState({ value: '', type: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
   const [error, setError] = useState();
+  const [success,setSuccess]=useState();
   const [valiCode,setValiCode]=useState('');
   const [inputCode,setInputCode]=useState({value: '', error: ''});
 
@@ -41,12 +42,15 @@ const ForgotPasswordScreen = ({ route,navigation }) => {
       let sql = "update user set password=? "+
               "where phone = ?";
               tx.executeSql(sql,[password.value,email.value],()=>{
+                setSuccess('修改密码成功！');
+                setTimeout(()=>{
+                  navigation.goBack();
+                },500);
               },(err)=>{
                   console.log(err);
               }
           );
     });
-    navigation.goBack();
   }
   const generate=()=>{
     var res='';
@@ -141,7 +145,8 @@ const ForgotPasswordScreen = ({ route,navigation }) => {
       >
         重置密码
       </Button>
-      <Toast message={error} onDismiss={() => setError('')} />
+      <Toast type='error' message={error} onDismiss={() => setError('')} />
+      <Toast type='success' message={success} onDismiss={() => setSuccess('')} />
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.Title>请记住验证码</Dialog.Title>

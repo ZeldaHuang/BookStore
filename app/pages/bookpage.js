@@ -6,6 +6,7 @@ import BookItem from '../component/item';
 import Data from '../data';
 import {deviceWidth, isIOS, px2dp} from '../util/index';
 import * as SQLiteExpo from 'expo-sqlite';
+
 var db;
 function BookList ({ route, navigation }){
     const [addFavor,deleteFavor,isFindFavor]=[route.params.addFavor,route.params.deleteFavor,route.params.isFindFavor];
@@ -14,7 +15,7 @@ function BookList ({ route, navigation }){
         var data=[];
         db = SQLiteExpo.openDatabase('MyDb', "1.0");
         db.transaction((tx)=>{
-            // tx.executeSql('drop table if exists Book',[],()=>{console.log("删除")},()=>{console.log("删除失败")});
+            tx.executeSql('drop table if exists Book',[],()=>{console.log("删除")},()=>{console.log("删除失败")});
             tx.executeSql('CREATE TABLE IF NOT EXISTS Book(' +
             'id varchar PRIMARY KEY,' +
             'num INTEGER)'
@@ -23,16 +24,16 @@ function BookList ({ route, navigation }){
           }, (err)=> {
             console.log('createTableErr'+err);
           });
-        //   Object.keys(Data).forEach((item, i) => {
-        //     Data[item].forEach((e, j) => {
-        //         tx.executeSql("INSERT INTO Book(id,num)"+
-        //         "values(?,?)"
-        //         , [Data[item][j].key,1], ()=> {
-        //         }, (err)=> {
-        //             console.log('insertError'+err);
-        //         });
-        //     });
-        //   });
+          Object.keys(Data).forEach((item, i) => {
+            Data[item].forEach((e, j) => {
+                tx.executeSql("INSERT INTO Book(id,num)"+
+                "values(?,?)"
+                , [Data[item][j].key,1], ()=> {
+                }, (err)=> {
+                    console.log('insertError'+err);
+                });
+            });
+          });
           tx.executeSql('select * from Book',
             [],
             (tx,results)=>{

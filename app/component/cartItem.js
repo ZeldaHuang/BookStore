@@ -77,8 +77,8 @@ function CartItem (props){
           <TouchableOpacity style={{alignSelf:"center",marginLeft:px2dp(5)}}
           onPress={()=>{showModal()}}>
             <Text style={styles.title}>{props.data.title}</Text>
-            <Text style={styles.price}>￥{props.data.price}</Text>
           </TouchableOpacity>
+          <Text style={styles.price}>￥{props.data.price}</Text>
         </View> 
         <View style={{flexDirection:"row",alignItems:"center",alignSelf:"flex-end",marginBottom:px2dp(35)}}>
             <TouchableOpacity style={{marginHorizontal:px2dp(12)}}
@@ -136,11 +136,11 @@ export default CartItem;
       rightContainer: {
         flex: 1,
         marginHorizontal:px2dp(2),
-        flexDirection:"row",
+        flexDirection:"column",
         marginBottom:px2dp(5)
       },
       title: {
-        fontSize: 18,
+        fontSize: 17,
         marginVertical:4,
         textAlign: 'center'
       },
@@ -148,7 +148,7 @@ export default CartItem;
         fontWeight:"bold",
         textAlign: 'center',
         fontSize:15,
-        color:Colors.orange900
+        color:Colors.orange900,
       },
       thumbnail: {
         marginLeft:20,

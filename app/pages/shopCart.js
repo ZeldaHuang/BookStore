@@ -18,7 +18,7 @@ function ShopCart ({ route, navigation }){
         var data=[];
         db = SQLiteExpo.openDatabase('MyDb', "1.0");
         db.transaction((tx)=>{
-            // tx.executeSql('drop table if exists Book',[],()=>{console.log("删除")},()=>{console.log("删除失败")});
+            tx.executeSql('drop table if exists Book',[],()=>{console.log("删除")},()=>{console.log("删除失败")});
             tx.executeSql('CREATE TABLE IF NOT EXISTS Book(' +
             'id varchar PRIMARY KEY,' +
             'num INTEGER)'
@@ -27,16 +27,16 @@ function ShopCart ({ route, navigation }){
           }, (err)=> {
             console.log('createTableErr'+err);
           });
-        //   Object.keys(Data).forEach((item, i) => {
-        //     Data[item].forEach((e, j) => {
-        //         tx.executeSql("INSERT INTO Book(id,num)"+
-        //         "values(?,?)"
-        //         , [Data[item][j].key,1], ()=> {
-        //         }, (err)=> {
-        //             console.log('insertError'+err);
-        //         });
-        //     });
-        //   });
+          Object.keys(Data).forEach((item, i) => {
+            Data[item].forEach((e, j) => {
+                tx.executeSql("INSERT INTO Book(id,num)"+
+                "values(?,?)"
+                , [Data[item][j].key,1], ()=> {
+                }, (err)=> {
+                    console.log('insertError'+err);
+                });
+            });
+          });
           tx.executeSql('select * from Book where num>0',
             [],
             (tx,results)=>{
@@ -50,6 +50,10 @@ function ShopCart ({ route, navigation }){
                     if(j==0){
                         item=Data.book[k];
                     }
+                    else if(j==1){
+                        item=Data.mgz[k];
+                    }
+                    else item=Data.paper[k];
                     item.num=u.num;
                     data.push(item);
                 }

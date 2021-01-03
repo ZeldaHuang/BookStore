@@ -63,7 +63,7 @@ function GoodsItem (props){
       />
       <View style={styles.rightContainer}>
         <Text style={styles.title}>{props.data.title}</Text>
-        <TouchableOpacity onPress={()=>favorFun()} style={{alignSelf:"flex-end",marginRight:10,height:px2dp(25),width:px2dp(25)}}>
+        <TouchableOpacity onPress={()=>favorFun()} style={{alignSelf:"flex-end",marginRight:10,height:px2dp(25),width:px2dp(25)}} >
           {isFavor?(<AntdIcon name={'star'} size={px2dp(20)} color={'#0865b5'}/>)
             :(<AntdIcon name={'staro'} size={px2dp(20)} color={'#0865b5'}/>)}
         </TouchableOpacity>
@@ -74,7 +74,8 @@ function GoodsItem (props){
       <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
         <ScrollView>
         <TouchableOpacity 
-        onPress={()=>favorFun()}>{isFavor?(<AntdIcon name={'star'} size={px2dp(24)} color={'#0865b5'} style={{alignSelf:"flex-end"}}/>)
+        onPress={()=>favorFun()}>
+          {isFavor?(<AntdIcon name={'star'} size={px2dp(24)} color={'#0865b5'} style={{alignSelf:"flex-end"}}/>)
             :(<AntdIcon name={'staro'} size={px2dp(24)} color={'#0865b5'} style={{alignSelf:"flex-end"}}/>)}
           </TouchableOpacity>
           <Text style={{fontSize:18,alignSelf:"center"}}>{props.data.title}({props.data.author}著)</Text>

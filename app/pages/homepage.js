@@ -5,7 +5,7 @@ import { Banner,Avatar, Button, Card, Title, Portal,Modal,IconButton, Colors,Lis
 import { ScrollView } from 'react-native-gesture-handler';
 import {deviceWidth, isIOS, px2dp} from '../util/index';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
-import GoodsItem from '../component/item';
+import BookItem from '../component/item';
 import PropTypes from 'prop-types';
 import Data from '../data';
 import * as SQLite from 'expo-sqlite';
@@ -63,7 +63,8 @@ export default function HomeScreen(props) {
             addFavor={(item)=>addItem(item)} deleteFavor={(item)=>deleteItem(item)} isFindFavor={(item)=>isFindItem(item)} />
           </View>
           <View style={style.centerView}>
-            <RenderBanner {...props}/>
+            <RenderBanner navigation={props.navigation} 
+            addFavor={(item)=>addItem(item)} deleteFavor={(item)=>deleteItem(item)} isFindFavor={(item)=>isFindItem(item)}/>
           </View>         
         </ScrollView>
       </View>
@@ -84,12 +85,15 @@ function FavorItem(props){
 };
   RenderBanner.propTypes = {
     navigation: PropTypes.object,
+    addFavor:PropTypes.func,
+    deleteFavor:PropTypes.func,
+    isFindFavor:PropTypes.func,
   };
   function RenderBanner(props){
     const [visible, setVisible] = React.useState(true);
     return (
-      <Card>
-        <Banner
+      <Card visible={visible}>
+        <Banner 
         visible={visible}
         actions={[
           {
@@ -101,10 +105,25 @@ function FavorItem(props){
             onPress: () => {},
           },
         ]}
-        icon= "star"
+        icon="star"
         >
-        <Text style={{fontSize:16}}>好书推荐</Text>
-        <GoodsItem data={Data.book[0]} />
+        <View style={{flexDirection:"column"}}>
+        <Text style={{fontSize:16,marginBottom:px2dp(10)}}>好书推荐</Text>
+        <Text style={{fontSize:20,marginBottom:px2dp(10)}}>《三体三部曲》</Text>
+        <View style={{flexDirection:"row"}}>
+          <Image
+         source={Data.book[0].image}
+         style={{      
+           alignSelf:"center",
+           width: 53,
+          height: 81}}
+         />
+         
+         <Text style={{marginTop:px2dp(20),marginLeft:px2dp(20),fontSize:20,color:Colors.orange800}}>￥99</Text>
+        </View>
+        
+        </View>
+       
       </Banner>
       </Card>
     );
@@ -133,11 +152,11 @@ function FavorItem(props){
         <Text style={style.typeText}>书籍</Text>
       </Button>
       <Button  style={style.typeButton} icon="book" color={Colors.black}
-      onPress={()=>{}}>
+      onPress={()=>props.navigation.navigate('MgzList',{addFavor:addFavor,deleteFavor:deleteFavor,isFindFavor:isFindFavor})}>
         <Text style={style.typeText}>杂志</Text>
       </Button>
       <Button  style={style.typeButton} icon="book-open-variant" color={Colors.black}
-      onPress={()=>{}}
+      onPress={()=>props.navigation.navigate('PaperList',{addFavor:addFavor,deleteFavor:deleteFavor,isFindFavor:isFindFavor})}
       >
        <Text style={style.typeText}>报纸</Text>
       </Button>
